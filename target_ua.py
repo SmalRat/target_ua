@@ -55,7 +55,16 @@ def get_words(path: str, letters: List[str]) -> List[str]:
                 pass
     return good_words
 
-
+def check_user_words(user_words, language_part, letters, dict_of_words):
+    words_list = []
+    for word in dict_of_words:
+        words_list.append(word[0])
+    correct_words = []
+    for word in user_words:
+        if word[0] in letters and dict_of_words[words_list.index(word)][1] == language_part:
+            correct_words.append(word)
+            words_list.pop(words_list.index(word))
+    return correct_words, words_list
 
 def get_user_words() -> List[str]:
     """
