@@ -1,5 +1,5 @@
 """
-Module of game about making words
+Module of game about making words(UA version)
 """
 from typing import List
 import random
@@ -8,33 +8,34 @@ import random
 def generate_grid() -> List[List[str]]:
     """
     Generates list of lists of letters - i.e. grid for the game.
-    e.g. [['I', 'G', 'E'], ['P', 'I', 'S'], ['W', 'M', 'G']]
-    >>> random.seed(2190)
+
+    >>> random.seed(2020)
     >>> generate_grid()
-    [['S', 'L', 'B'], ['H', 'X', 'V'], ['S', 'Q', 'R']]
+    ['і', 'щ', 'ш', 'ь', 'у']
     """
+    alphabet = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя'
     grid = []
-    for i in range(3):
-        grid.append([])
-        for j in range(3):
-            j += 0
-            grid[i].append(chr(random.randint(65, 90)))
+    count = 0
+    while count < 5:
+        letter = random.choice(alphabet)
+        if letter not in grid:
+            count+=1
+            grid.append(letter)
     return grid
 
 
 def get_words(path: str, letters: List[str]) -> List[str]:
     """
     Reads the file f. Checks the words with rules and returns a list of words.
-    >>> get_words("en.txt", ['f', 'r', 'l', 'h', 'k', 'd', 'z', 'g', 'i'])
-    ['dirk', 'firk', 'khir']
+    >>> get_words("base.lst", ['і', 'щ', 'ш', 'ь', 'у'])
+
     """
     good_words = []
-    main_letter = letters[4]
     with open(path, "r", encoding="utf-8") as dictionary:
         lines = dictionary.readlines()
         for i in range(3, len(lines)):
             lines[i] = lines[i].lower().strip()
-            if (main_letter in lines[i]) and len(lines[i]) >= 4:
+            if (main_letter in lines[i]) and len(lines[i]) < 6:
                 check = 1
                 for letterl in lines[i]:
                     if (letterl not in letters) or lines[i].count(letterl) > letters.count(letterl):
@@ -107,4 +108,5 @@ def results():
 
 
 if __name__ == "__main__":
-    results()
+    #results()
+    generate_grid()
