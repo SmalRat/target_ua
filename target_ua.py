@@ -25,13 +25,32 @@ def generate_grid() -> List[List[str]]:
 def get_words(path: str, letters: List[str]) -> List[str]:
     """
     Reads the file f. Checks the words with rules and returns a list of words.
-    >>> print("No time")
-    No time
+    >>> get_words("base.lst", ['й', 'є', 'ю'])
+    [('євнух', 'noun'), ('єврей', 'noun'), ('євро', 'noun'), ('єгер', 'noun'), \
+('єдваб', 'noun'), ('єзуїт', 'noun'), ('єлей', 'noun'), ('ємний', 'adjective'), \
+('ємно', 'adverb'), ('єна', 'noun'), ('єнот', 'noun'), ('єпарх', 'noun'), \
+('єресь', 'noun'), ('єри', 'noun'), ('єрик', 'noun'), ('єрик', 'noun'), \
+('єство', 'noun'), ('єті', 'noun'), ('єхида', 'noun'), ('йняти', 'verb'), \
+('йог', 'noun'), ('йога', 'noun'), ('йод', 'noun'), ('йодат', 'noun'), \
+('йодид', 'noun'), ('йодил', 'noun'), ('йодит', 'noun'), ('йодль', 'noun'), \
+('йола', 'noun'), ('йолоп', 'noun'), ('йомен', 'noun'), ('йон', 'noun'), \
+('йорж', 'noun'), ('йорж', 'noun'), ('йот', 'noun'), ('йота', 'noun'), \
+('йти', 'verb'), ('йтися', 'verb'), ('юань', 'noun'), ('юга', 'noun'), \
+('югурт', 'noun'), ('юда', 'noun'), ('юдей', 'noun'), ('юдин', 'adjective'), \
+('юдоль', 'noun'), ('юзом', 'adverb'), ('юїтка', 'noun'), ('юка', 'noun'), \
+('юкола', 'noun'), ('юнак', 'noun'), ('юнга', 'noun'), ('юний', 'adjective'), \
+('юніор', 'noun'), ('юнка', 'noun'), ('юнкер', 'noun'), ('юнкор', 'noun'), \
+('юннат', 'noun'), ('юнь', 'noun'), ('юпка', 'noun'), ('юра', 'noun'), \
+('юрба', 'noun'), ('юрик', 'noun'), ('юрист', 'noun'), ('юрма', 'noun'), \
+('юрода', 'noun'), ('юрок', 'noun'), ('юрок', 'noun'), \
+('юрта', 'noun'), ('юрфак', 'noun'), ('юс', 'noun'), ('ют', 'noun'), \
+('ютуб', 'noun'), ('юферс', 'noun'), ('юхта', 'noun'), ('юшити', 'verb'), \
+('юшка', 'noun'), ('ююба', 'noun')]
     """
     good_words = []
     with open(path, "r", encoding="utf-8") as dictionary:
         lines = dictionary.readlines()
-        for i in range(len(lines)):
+        for i, _ in enumerate(lines):
             lines[i] = lines[i].lower().strip()
             try:
                 line = lines[i].split(" ")[1]
@@ -41,7 +60,8 @@ def get_words(path: str, letters: List[str]) -> List[str]:
                          line[0] == "n" or line[0] == "v"\
                          or line[:3] == "adj"  or line[:4] == "noun")\
                         and (lines[i][0] in letters):
-                    if (line[:2] == "/n" or line[0] == "n" or line[:4] == "noun") and line[:7] != "noninfl":
+                    if (line[:2] == "/n" or line[0] == "n" or line[:4] == "noun")\
+                            and line[:7] != "noninfl":
                         good_words.append(tuple((lines[i].split(" ")[0], "noun")))
                     if line[:4] == "/adj" or line[:3] == "adj":
                         good_words.append(tuple((lines[i].split(" ")[0], "adjective")))
@@ -49,7 +69,7 @@ def get_words(path: str, letters: List[str]) -> List[str]:
                         good_words.append(tuple((lines[i].split(" ")[0], "verb")))
                     if line[:3] == "adv":
                         good_words.append(tuple((lines[i].split(" ")[0], "adverb")))
-            except:
+            except IndexError:
                 pass
     return good_words
 
@@ -66,12 +86,16 @@ def check_user_words(user_words, language_part, letters, dict_of_words):
     :return:
     """
     words_list = []
-    for word in dict_of_words:
-        words_list.append(word[0])
+    new_dict = []
+    for i, word in enumerate(dict_of_words):
+        if dict_of_words[i][1] == language_part:
+            new_dict.append(word)
+            words_list.append(word[0])
     correct_words = []
+
     for word in user_words:
-        if word[0] in letters and dict_of_words[words_list.index(word)][1] == language_part:
-            correct_words.append(word)
-            words_list.pop(words_list.index(word))
+        if word in words_list:
+            if word[0] in letters and new_dict[words_list.index(word)][1] == language_part:
+                correct_words.append(word)
+                words_list.pop(words_list.index(word))
     return correct_words, words_list
-print(get_words("base.lst", ['й', 'є', 'ю']))
