@@ -4,7 +4,6 @@ Module of game about making words(UA version)
 from typing import List
 import random
 
-
 def generate_grid() -> List[List[str]]:
     """
     Generates list of lists of letters - i.e. grid for the game.
@@ -22,7 +21,6 @@ def generate_grid() -> List[List[str]]:
             count+=1
             grid.append(letter)
     return grid
-
 
 def get_words(path: str, letters: List[str]) -> List[str]:
     """
@@ -43,7 +41,7 @@ def get_words(path: str, letters: List[str]) -> List[str]:
                          line[0] == "n" or line[0] == "v"\
                          or line[:3] == "adj"  or line[:4] == "noun")\
                         and (lines[i][0] in letters):
-                    if (line[:2] == "/n" or line[0] == "n" or line[:4] == "noun"):
+                    if (line[:2] == "/n" or line[0] == "n" or line[:4] == "noun") and line[:7] != "noninfl":
                         good_words.append(tuple((lines[i].split(" ")[0], "noun")))
                     if line[:4] == "/adj" or line[:3] == "adj":
                         good_words.append(tuple((lines[i].split(" ")[0], "adjective")))
@@ -60,6 +58,7 @@ def check_user_words(user_words, language_part, letters, dict_of_words):
     Checks user's words
     >>> print("Sorry, l have no time")
     Sorry, l have no time
+
     :param user_words:
     :param language_part:
     :param letters:
@@ -75,6 +74,4 @@ def check_user_words(user_words, language_part, letters, dict_of_words):
             correct_words.append(word)
             words_list.pop(words_list.index(word))
     return correct_words, words_list
-
-if __name__ == "__main__":
-    pass
+print(get_words("base.lst", ['й', 'є', 'ю']))
